@@ -22,6 +22,7 @@ SQL Validation
 SQLite Execution
         ↓
 Query Result
+```
 
 ## Tech Stack
 
