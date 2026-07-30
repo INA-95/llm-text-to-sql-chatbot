@@ -1,6 +1,6 @@
 # Google Spreadsheets 연결
-# 질문 읽기
-# SQL 출력 결과 입력
+# 질문 및 Human SQL 읽기
+# LLM SQL과 실행 결과 입력
 
 import gspread
 from google.oauth2.service_account import Credentials
@@ -8,8 +8,11 @@ from google.oauth2.service_account import Credentials
 from src.config import (
     CREDENTIALS_PATH,
     GOOGLE_SCOPES,
+    HUMAN_SQL_COLUMN,
+    HUMAN_SQL_RESULT_COLUMN,
+    LLM_SQL_COLUMN,
+    LLM_SQL_RESULT_COLUMN,
     QUESTION_COLUMN,
-    RESULT_SQL_COLUMN,
     SPREADSHEET_ID,
     WORKSHEET_NAME,
 )
@@ -44,14 +47,14 @@ def get_worksheet() -> gspread.Worksheet:
     )
 
 
-def get_questions_from_sheet(
+def get_test_cases_from_sheet(
     worksheet: gspread.Worksheet,
-) -> list[str]:
-    """Read non-empty questions from the questions column."""
+) -> list[dict[str, str]]:
+    """Read questions and human-written SQL from Google Sheets."""
 
     records = worksheet.get_all_records()
 
-    questions: list[str] = []
+    test_cases: list[dict[str, str]] = []
 
     for record in records:
         question = str(
@@ -61,65 +64,113 @@ def get_questions_from_sheet(
             )
         ).strip()
 
-        if question:
-            questions.append(question)
+        human_sql = str(
+            record.get(
+                HUMAN_SQL_COLUMN,
+                "",
+            )
+        ).strip()
 
-    return questions
+        if not question:
+            continue
+
+        test_cases.append(
+            {
+                "question": question,
+                "human_sql": human_sql,
+            }
+        )
+
+    return test_cases
 
 
-def update_generated_sql(
+def update_evaluation_results(
     worksheet: gspread.Worksheet,
     results: list[dict[str, str]],
 ) -> None:
-    """Write generated SQL into the result_sql column."""
+    """Write LLM SQL and SQL execution results to Google Sheets."""
 
     if not results:
         print(
-            "No SQL results are available to update."
+            "No evaluation results are available to update."
         )
         return
 
     headers = worksheet.row_values(1)
 
-    if RESULT_SQL_COLUMN not in headers:
+    required_columns = [
+        LLM_SQL_COLUMN,
+        LLM_SQL_RESULT_COLUMN,
+        HUMAN_SQL_RESULT_COLUMN,
+    ]
+
+    missing_columns = [
+        column
+        for column in required_columns
+        if column not in headers
+    ]
+
+    if missing_columns:
         raise ValueError(
-            f"Column not found: {RESULT_SQL_COLUMN}"
+            "Columns not found: "
+            + ", ".join(missing_columns)
         )
 
-    result_column_index = (
-        headers.index(RESULT_SQL_COLUMN) + 1
+    llm_sql_column_index = (
+        headers.index(LLM_SQL_COLUMN) + 1
     )
 
-    result_column_letter = (
-        gspread.utils.rowcol_to_a1(
-            1,
-            result_column_index,
-        )[:-1]
+    llm_result_column_index = (
+        headers.index(LLM_SQL_RESULT_COLUMN) + 1
     )
 
-    values = [
-        [
-            result["generated_sql"]
-            if result["status"] == "success"
-            else ""
-        ]
+    human_result_column_index = (
+        headers.index(HUMAN_SQL_RESULT_COLUMN) + 1
+    )
+
+    start_row = 2
+    end_row = start_row + len(results) - 1
+
+    llm_sql_values = [
+        [result["llm_sql"]]
         for result in results
     ]
 
-    start_row = 2
-    end_row = start_row + len(values) - 1
+    llm_result_values = [
+        [result["llm_sql_result"]]
+        for result in results
+    ]
 
-    range_name = (
-        f"{result_column_letter}{start_row}:"
-        f"{result_column_letter}{end_row}"
+    human_result_values = [
+        [result["human_sql_result"]]
+        for result in results
+    ]
+
+    worksheet.update(
+        range_name=(
+            f"{gspread.utils.rowcol_to_a1(start_row, llm_sql_column_index)}:"
+            f"{gspread.utils.rowcol_to_a1(end_row, llm_sql_column_index)}"
+        ),
+        values=llm_sql_values,
     )
 
     worksheet.update(
-        range_name=range_name,
-        values=values,
+        range_name=(
+            f"{gspread.utils.rowcol_to_a1(start_row, llm_result_column_index)}:"
+            f"{gspread.utils.rowcol_to_a1(end_row, llm_result_column_index)}"
+        ),
+        values=llm_result_values,
+    )
+
+    worksheet.update(
+        range_name=(
+            f"{gspread.utils.rowcol_to_a1(start_row, human_result_column_index)}:"
+            f"{gspread.utils.rowcol_to_a1(end_row, human_result_column_index)}"
+        ),
+        values=human_result_values,
     )
 
     print(
-        f"\nUpdated {len(values)} SQL results "
+        f"\nUpdated {len(results)} evaluation results "
         f"in Google Sheets."
     )

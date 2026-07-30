@@ -25,10 +25,15 @@ MODEL_NAME = "gpt-5-mini"
 
 # Google Sheets
 SPREADSHEET_ID = "1WhdDJocxNrBo111y8FvZ8qyqGxG784pZAATRJPFo1jU"
-WORKSHEET_NAME = "Sheet1"
+WORKSHEET_NAME = "Sheet3"
 
 QUESTION_COLUMN = "questions"
-RESULT_SQL_COLUMN = "result_sql"
+HUMAN_SQL_COLUMN = "human_sql"
+
+LLM_SQL_COLUMN = "llm_sql"
+LLM_SQL_RESULT_COLUMN = "llm_sql_result"
+
+HUMAN_SQL_RESULT_COLUMN = "human_sql_result"
 
 
 # Google Sheets API scope

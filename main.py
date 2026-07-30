@@ -9,9 +9,9 @@ from src.pipeline import (
     print_summary,
 )
 from src.sheets import (
-    get_questions_from_sheet,
+    get_test_cases_from_sheet,
     get_worksheet,
-    update_generated_sql,
+    update_evaluation_results,
 )
 
 
@@ -31,28 +31,28 @@ def main() -> None:
 
         worksheet = get_worksheet()
 
-        questions = get_questions_from_sheet(
+        test_cases = get_test_cases_from_sheet(
             worksheet
         )
 
-        if not questions:
+        if not test_cases:
             print(
-                "No questions were found in "
+                "No test cases were found in "
                 "the 'questions' column."
             )
             return
 
         print(
-            f"Loaded {len(questions)} questions "
+            f"Loaded {len(test_cases)} test cases "
             "from Google Sheets.\n"
         )
 
         results = generate_sql_for_questions(
-            questions=questions,
+            test_cases=test_cases,
             schema=schema,
         )
 
-        update_generated_sql(
+        update_evaluation_results(
             worksheet=worksheet,
             results=results,
         )
