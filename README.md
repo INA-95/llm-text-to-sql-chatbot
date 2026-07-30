@@ -85,6 +85,10 @@ To evaluate SQL quality and system reliability:
 
 Iterative refinement improved model behavior by **20%**.
 
+The automated QA workflow is implemented in the following evaluation pipeline:
+
+📁 **Evaluation Pipeline:** [`evaluation-pipeline/`](./evaluation-pipeline)
+
 ---
 
 ## Final Result
