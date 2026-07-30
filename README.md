@@ -1,31 +1,32 @@
-# Text-to-SQL Evaluation Framework
-
-## Overview
-
-This project demonstrates an end-to-end Text-to-SQL pipeline using SQLite and OpenAI.
-
-## Pipeline
+## End-to-End Evaluation Workflow
 
 ```text
-Natural Language Question
-        ↓
-Schema Extraction
-        ↓
-Prompt Generation
-        ↓
-OpenAI API
-        ↓
-SQL Generation
-        ↓
-SQL Validation
-        ↓
-SQLite Execution
-        ↓
-Query Result
+Google Sheets
+──────────────────────────────────────────────
+Question
+Human SQL
+        │
+        ▼
+Generate SQL using LLM
+        │
+        ▼
+Execute LLM SQL
+        │
+        ▼
+Execute Human SQL
+        │
+        ▼
+Write results back to Google Sheets
+──────────────────────────────────────────────
+LLM SQL
+LLM SQL Result
+Human SQL Result
 ```
 
-## Tech Stack
+The current pipeline automatically:
 
-- Python
-- SQLite
-- OpenAI API
+1. Reads user questions and human-written SQL from Google Sheets.
+2. Generates SQL using an LLM.
+3. Executes the generated SQL against the evaluation database.
+4. Executes the corresponding human-written SQL.
+5. Writes the generated SQL and both execution results back to Google Sheets for manual evaluation.
