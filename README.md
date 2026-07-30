@@ -1,23 +1,25 @@
 ## End-to-End Evaluation Workflow
 
 ```text
-Google Sheets
-──────────────────────────────────────────────
-Question
-Human SQL
+ Google Sheets
+───────────────────────
+    Question
+        │
+        ▼
+    Human SQL
         │
         ▼
 Generate SQL using LLM
         │
         ▼
-Execute LLM SQL
+  Execute LLM SQL
         │
         ▼
-Execute Human SQL
+ Execute Human SQL
         │
         ▼
-Write results back to Google Sheets
-──────────────────────────────────────────────
+Update Google Sheets
+───────────────────────
 LLM SQL
 LLM SQL Result
 Human SQL Result
