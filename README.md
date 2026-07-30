@@ -5,8 +5,8 @@ This project presents a conversational analytics chatbot that uses LLMs to conve
 
 ---
 
-## Project Report  
-- [Download PDF](./LLM_Chatbot_Side_Project.pdf)
+## Project Report
+- [Download PDF](./LLM%20Chatbot%20Side%20Project.pdf)
 
 ---
 
