@@ -83,11 +83,29 @@ To evaluate SQL quality and system reliability:
   - Table mismatch  
   - Excessive or missing SQL constraints  
 
-Iterative refinement improved model behavior by **20%**.
-
 The automated QA workflow is implemented in the following evaluation pipeline:
 
 📁 **Evaluation Pipeline:** [`evaluation-pipeline/`](./evaluation-pipeline)
+
+## Error-Driven Prompt Refinement
+
+| Error Type |
+|---|
+|Temporal Reasoning Error|
+|Null Value|
+|Over-generated Response|
+|Restriction|
+|Metric Calculation|
+|Table selection|
+
+
+Based on the failure analysis, I iteratively refined the prompts
+using error-specific instructions and few-shot examples.
+
+These refinements reduced the overall error rate by 20%.
+However, the evaluation focused on aggregate performance.
+I did not separately measure which prompting strategy was most
+effective for each type of reasoning error.
 
 ---
 
@@ -116,7 +134,7 @@ Through this project, key lessons learned include:
 - Balancing model freedom and constraint  
 - Understanding LLM limitations (especially reasoning consistency)  
 - Value of version tracking in iterative model design  
-
+- Future research question : Do different types of reasoning failures requires different prompting strategies?
 ---
 
 ## Keywords  
