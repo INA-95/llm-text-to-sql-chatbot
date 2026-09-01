@@ -1,5 +1,5 @@
-# Fanfinder: LLM-Based Data Analysis Chatbot  
-**An Automated Text-to-SQL Analytics System for Nonprofit Organizations**
+# Fanfinder: LLM Text-to-SQL Analytics Chatbot
+**A conversational analytics system that enables non-technical users to query business data using natural language.**
 
 This project presents a conversational analytics chatbot that uses LLMs to convert natural-language questions into SQL queries and generate real-time insights. The system is designed for nonprofit organizations that need analytics capabilities but lack SQL expertise.
 
@@ -15,8 +15,8 @@ This project presents a conversational analytics chatbot that uses LLMs to conve
 - **Tech Stack:** GPT-4o mini, LangChain, Text-to-SQL pipeline, Google BigQuery  
 - **Duration:** Oct 2024 – Mar 2025  
 - **Performance Metrics:**  
-  - 90% SQL syntax accuracy across 100 test cases  
-  - 98% intent alignment accuracy  
+  - 90% SQL syntax accuracy across 50+ test cases  
+  - 90% query accuracy
 
 The system automates:
 1. Intent classification  
