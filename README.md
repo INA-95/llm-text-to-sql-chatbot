@@ -42,6 +42,8 @@ This project solves that gap with:
 
 ## System Architecture
 
+![System Architecture](Architecture.png)
+
 The pipeline consists of six modular components:
 
 ### 1. Intent Classification Prompt  
