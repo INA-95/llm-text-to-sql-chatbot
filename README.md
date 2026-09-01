@@ -75,7 +75,7 @@ The pipeline consists of six modular components:
 
 ## QA Automation
 
-To evaluate SQL quality and system reliability:
+To evaluate Text-to-SQL performance during prompt development, I built a separate QA workflow for testing generated SQL and identifying failure patterns.
 - Built an automated QA pipeline using **Google Sheets API + OpenAI API**  
 - Ran large-scale regression tests  
 - Classified failure cases by type:
